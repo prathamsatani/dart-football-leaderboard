@@ -1,0 +1,31 @@
+type User @table {
+  displayName: String!
+  email: String
+  photoUrl: String
+  createdAt: Timestamp!
+}
+
+type RCCar @table {
+  user: User
+  name: String!
+  model: String
+  description: String
+  createdAt: Timestamp!
+}
+
+type Track @table {
+  name: String!
+  location: String
+  description: String
+  createdAt: Timestamp!
+}
+
+type RaceResult @table {
+  user: User
+  car: RCCar
+  track: Track
+  lapTimeInMilliseconds: Int64!
+  raceDate: Date!
+  notes: String
+  createdAt: Timestamp!
+}
