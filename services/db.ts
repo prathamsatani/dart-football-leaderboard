@@ -16,8 +16,8 @@ const FIREBASE_CONFIG = {
   projectId: "rc-car-racing-f134d",
   storageBucket: "rc-car-racing-f134d.firebasestorage.app",
   messagingSenderId: "662223021044",
-  appId: "1:662223021044:web:a97f2f2b71936a275d0fa1",
-  measurementId: "G-GMNVKND1R5"
+  appId: "1:662223021044:web:0ba9e60771ea35925d0fa1",
+  measurementId: "G-78YY4PDY6T"
 };
 
 // Check if config is set (basic check)
@@ -38,12 +38,12 @@ if (isFirebaseConfigured) {
   console.warn("Firebase not configured. Using local IndexedDB. Data will NOT sync across devices.");
 }
 
-const COLLECTION_NAME = 'players';
+const COLLECTION_NAME = 'dart-football';
 
 // =================================================================================
 // FALLBACK: INDEXEDDB (If Firebase is not configured)
 // =================================================================================
-const DB_NAME = 'NexusRacersDB';
+const DB_NAME = 'NexusLeaderboardDB';
 const DB_VERSION = 1;
 const STORE_NAME = 'players';
 

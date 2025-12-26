@@ -38,10 +38,10 @@ function App() {
     };
   }, []);
 
-  // Derived state: Sorted players by Lap Time (Ascending - Lower is better)
+  // Derived state: Sorted players by Score (Descending - Higher is better)
   const sortedPlayers = useMemo(() => {
     return [...players]
-      .sort((a, b) => a.lapTime - b.lapTime)
+      .sort((a, b) => b.score - a.score)
       .map((p, index) => ({ ...p, rank: index + 1 }));
   }, [players]);
 
@@ -54,8 +54,8 @@ function App() {
   const topThree = sortedPlayers.slice(0, 3);
   
   // Stats
-  const averageTime = players.length > 0 ? (players.reduce((acc, curr) => acc + curr.lapTime, 0) / players.length).toFixed(3) : "0.000";
-  const bestTime = sortedPlayers.length > 0 ? sortedPlayers[0].lapTime.toFixed(3) : "0.000";
+  const averageScore = players.length > 0 ? Math.round(players.reduce((acc, curr) => acc + curr.score, 0) / players.length) : 0;
+  const topScore = sortedPlayers.length > 0 ? sortedPlayers[0].score : 0;
 
   const handleAddPlayer = async (newPlayer: Omit<Player, 'id' | 'rank'>) => {
     const player: Player = {
@@ -74,7 +74,7 @@ function App() {
   };
 
   const handleDelete = async (id: string) => {
-      if (window.confirm("Are you sure you want to remove this racer?")) {
+      if (window.confirm("Are you sure you want to remove this player?")) {
           try {
             await db.deletePlayer(id);
           } catch (err) {
@@ -86,7 +86,7 @@ function App() {
   const handleAnalyzePlayer = async (player: Player) => {
       setAnalyzingId(player.id);
       const advice = await analyzePlayerPerformance(player, sortedPlayers);
-      alert(`${player.name} Pit Crew Analysis:\n\n${advice}`); 
+      alert(`${player.name} Performance Analysis:\n\n${advice}`); 
       setAnalyzingId(null);
   }
 
@@ -100,7 +100,7 @@ function App() {
       <div className="min-h-screen bg-[#0f172a] flex items-center justify-center text-slate-400">
         <div className="flex flex-col items-center gap-4">
           <Database className="w-12 h-12 animate-bounce text-indigo-500" />
-          <p>Connecting to Pit Wall...</p>
+          <p>Connecting to Server...</p>
         </div>
       </div>
     );
@@ -116,7 +116,7 @@ function App() {
                 <Trophy className="w-5 h-5 text-white" />
             </div>
             <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
-              RC <span className="text-indigo-500">RACING HUB</span>
+              GAME <span className="text-indigo-500">LEADERBOARD</span>
             </h1>
           </div>
           
@@ -143,7 +143,7 @@ function App() {
                 className="text-sm px-2 sm:px-4"
                 >
                 <LayoutDashboard className="w-4 h-4 sm:mr-2" />
-                <span className="hidden sm:inline">Track Board</span>
+                <span className="hidden sm:inline">Leaderboard</span>
                 </Button>
                 <Button 
                 variant={viewMode === ViewMode.ADMIN ? 'primary' : 'ghost'} 
@@ -151,7 +151,7 @@ function App() {
                 className="text-sm px-2 sm:px-4"
                 >
                 <PlusCircle className="w-4 h-4 sm:mr-2" />
-                <span className="hidden sm:inline">Log Time</span>
+                <span className="hidden sm:inline">Log Score</span>
                 </Button>
             </nav>
           </div>
@@ -165,21 +165,21 @@ function App() {
         {viewMode === ViewMode.LEADERBOARD && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
              <StatCard 
-                label="Total Racers" 
+                label="Total Players" 
                 value={players.length} 
                 icon={<Users className="w-6 h-6 text-indigo-400"/>} 
                 color="indigo"
              />
              <StatCard 
-                label="Best Lap" 
-                value={`${bestTime}s`} 
+                label="Top Score" 
+                value={`${topScore}`} 
                 icon={<Trophy className="w-6 h-6 text-amber-400"/>} 
                 color="amber"
              />
              <StatCard 
-                label="Avg Lap Time" 
-                value={`${averageTime}s`} 
-                icon={<Timer className="w-6 h-6 text-emerald-400"/>} 
+                label="Avg Score" 
+                value={`${averageScore}`} 
+                icon={<TrendingUp className="w-6 h-6 text-emerald-400"/>} 
                 color="emerald"
              />
           </div>
@@ -203,7 +203,7 @@ function App() {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                             <input 
                                 type="text" 
-                                placeholder="Find racer..." 
+                                placeholder="Find player..." 
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none w-full sm:w-64"
@@ -216,8 +216,8 @@ function App() {
                             <thead>
                                 <tr className="bg-slate-900/50 text-slate-400 text-sm uppercase tracking-wider">
                                     <th className="p-2 sm:p-4 font-medium w-10 sm:w-16 text-center text-xs sm:text-sm">Pos</th>
-                                    <th className="p-2 sm:p-4 font-medium text-xs sm:text-sm">Driver</th>
-                                    <th className="p-2 sm:p-4 font-medium text-right text-xs sm:text-sm">Lap Time</th>
+                                    <th className="p-2 sm:p-4 font-medium text-xs sm:text-sm">Player</th>
+                                    <th className="p-2 sm:p-4 font-medium text-right text-xs sm:text-sm">Score</th>
                                     <th className="p-2 sm:p-4 font-medium text-center hidden sm:table-cell text-xs sm:text-sm">Actions</th>
                                 </tr>
                             </thead>
@@ -248,14 +248,14 @@ function App() {
                                             </div>
                                         </td>
                                         <td className="p-2 sm:p-4 text-right font-mono text-indigo-300 font-medium whitespace-nowrap text-sm sm:text-base">
-                                            {player.lapTime.toFixed(3)}s
+                                            {player.score}
                                         </td>
                                         <td className="p-2 sm:p-4 text-center hidden sm:table-cell">
                                             <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button 
                                                     onClick={() => handleAnalyzePlayer(player)}
                                                     className="p-2 hover:bg-indigo-500/20 text-indigo-400 rounded-lg transition-colors"
-                                                    title="Crew Chief Analysis"
+                                                    title="Performance Analysis"
                                                     disabled={analyzingId === player.id}
                                                 >
                                                     {analyzingId === player.id ? (
@@ -267,7 +267,7 @@ function App() {
                                                 <button 
                                                     onClick={() => handleDelete(player.id)}
                                                     className="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
-                                                    title="Disqualify/Remove"
+                                                    title="Remove Player"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
@@ -278,7 +278,7 @@ function App() {
                                 {filteredPlayers.length === 0 && (
                                     <tr>
                                         <td colSpan={4} className="p-8 text-center text-slate-500">
-                                            No drivers found on the grid.
+                                            No players found.
                                         </td>
                                     </tr>
                                 )}

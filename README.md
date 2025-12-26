@@ -1,17 +1,17 @@
-# Nexus Leaderboard 🏎️
+# Nexus Leaderboard �
 
-Nexus Leaderboard is a high-octane, interactive leaderboard application designed for RC Car Racing events. Built with React, Vite, and TypeScript, it features real-time rankings, AI-powered commentary, and performance insights to elevate the racing experience.
+Nexus Leaderboard is a dynamic, interactive leaderboard application designed for gaming events. Built with React, Vite, and TypeScript, it features real-time rankings, AI-powered commentary, and performance insights to elevate the gaming experience.
 
 ## 🚀 Features
 
--   **Live Leaderboard**: Real-time ranking of drivers based on lap times (lower is better).
--   **🏆 Podium View**: Visually celebrates the top 3 drivers.
--   **🤖 AI Commentary**: Generates dynamic, high-energy race commentary using Google Gemini AI.
--   **📊 Performance Insights**: Provides personalized AI-driven advice for drivers to improve their lap times.
--   **Admin Dashboard**: Secure interface to add new racers and manage existing entries.
+-   **Live Leaderboard**: Real-time ranking of players based on scores (higher is better).
+-   **🏆 Podium View**: Visually celebrates the top 3 players.
+-   **🤖 AI Commentary**: Generates dynamic, high-energy game commentary using Google Gemini AI.
+-   **📊 Performance Insights**: Provides personalized AI-driven advice for players to improve their scores.
+-   **Admin Dashboard**: Secure interface to add new players and manage existing entries.
 -   **Data Persistence**: Uses IndexedDB for robust client-side data storage.
--   **Interactive Charts**: Visualizes lap time distribution and trends.
--   **Search & Filter**: Quickly find drivers by name.
+-   **Interactive Charts**: Visualizes score distribution and trends.
+-   **Search & Filter**: Quickly find players by name.
 
 ## 🛠️ Tech Stack
 

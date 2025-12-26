@@ -20,12 +20,11 @@ type Track @table {
   createdAt: Timestamp!
 }
 
-type RaceResult @table {
+type GameResult @table {
   user: User
-  car: RCCar
-  track: Track
-  lapTimeInMilliseconds: Int64!
-  raceDate: Date!
+  game: String
+  score: Int!
+  date: Date!
   notes: String
   createdAt: Timestamp!
 }

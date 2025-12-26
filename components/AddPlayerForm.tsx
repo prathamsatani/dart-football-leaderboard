@@ -11,13 +11,13 @@ interface AddPlayerFormProps {
 
 const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAddPlayer, onCancel, onLogout }) => {
   const [name, setName] = useState('');
-  const [lapTime, setLapTime] = useState('');
-  const [game, setGame] = useState('RC Thunder Track'); // Default game
+  const [score, setScore] = useState('');
+  const [game, setGame] = useState('Dart Football'); // Default game
   const [showSuccess, setShowSuccess] = useState(false);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !lapTime) return;
+    if (!name.trim() || !score) return;
 
     // Generate random avatar
     const randomId = Math.floor(Math.random() * 1000);
@@ -25,7 +25,7 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAddPlayer, onCancel, on
 
     onAddPlayer({
       name: name.trim(),
-      lapTime: parseFloat(lapTime), // Keep decimal precision for laps
+      score: parseInt(score, 10), // Integer score
       game: game.trim(),
       avatarUrl
     });
@@ -36,7 +36,7 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAddPlayer, onCancel, on
 
     // Reset fields for next entry, but keep Game Title (Batch Entry Workflow)
     setName('');
-    setLapTime('');
+    setScore('');
   };
 
   return (
@@ -47,7 +47,7 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAddPlayer, onCancel, on
             <Timer className="w-6 h-6 text-indigo-400" />
             </div>
             <div>
-            <h2 className="text-xl font-bold text-white">Log Lap Time</h2>
+            <h2 className="text-xl font-bold text-white">Log Score</h2>
             <p className="text-slate-400 text-sm">Coordinator Console</p>
             </div>
         </div>
@@ -66,14 +66,14 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAddPlayer, onCancel, on
       {showSuccess && (
           <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-3 animate-fade-in">
               <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-              <p className="text-emerald-300 text-sm">Lap time recorded successfully! Ready for next racer.</p>
+              <p className="text-emerald-300 text-sm">Score recorded! Ready for next round.</p>
           </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-            <label htmlFor="name" className="block text-sm font-medium text-slate-300">Racer Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-slate-300">Player Name</label>
             <input
                 type="text"
                 id="name"
@@ -86,14 +86,14 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAddPlayer, onCancel, on
             </div>
 
             <div className="space-y-2">
-            <label htmlFor="lapTime" className="block text-sm font-medium text-slate-300">Lap Time (Seconds)</label>
+            <label htmlFor="score" className="block text-sm font-medium text-slate-300">Score</label>
             <input
                 type="number"
-                id="lapTime"
-                value={lapTime}
-                onChange={(e) => setLapTime(e.target.value)}
-                placeholder="e.g. 24.53"
-                step="0.001"
+                id="score"
+                value={score}
+                onChange={(e) => setScore(e.target.value)}
+                placeholder="e.g. 1500"
+                step="1"
                 className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                 required
             />
@@ -101,7 +101,7 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAddPlayer, onCancel, on
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="game" className="block text-sm font-medium text-slate-300">Race Event / Game</label>
+          <label htmlFor="game" className="block text-sm font-medium text-slate-300">Game / Event</label>
           <input
             type="text"
             id="game"
@@ -114,7 +114,7 @@ const AddPlayerForm: React.FC<AddPlayerFormProps> = ({ onAddPlayer, onCancel, on
         <div className="pt-4 flex items-center gap-3">
             <Button type="submit" className="flex-1 md:flex-none w-full md:w-auto">
                 <Save className="w-4 h-4 mr-2" />
-                Submit Time
+                Submit Score    
             </Button>
              <Button variant="secondary" type="button" onClick={onCancel} className="sm:hidden flex-1">
                  Cancel

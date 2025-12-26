@@ -1,7 +1,7 @@
 export interface Player {
   id: string;
   name: string;
-  lapTime: number; // Time in seconds (lower is better)
+  score: number; // Integer score (higher is better)
   game: string;
   avatarUrl?: string;
   rank?: number; 

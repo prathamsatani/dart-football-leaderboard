@@ -29,7 +29,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onCancel }) => {
                 <Lock className="w-8 h-8 text-indigo-400" />
             </div>
             <h2 className="text-xl font-bold text-white">Coordinator Access</h2>
-            <p className="text-slate-400 text-sm mt-2">Enter authorization code to log race times.</p>
+            <p className="text-slate-400 text-sm mt-2">Enter authorization code to log scores.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

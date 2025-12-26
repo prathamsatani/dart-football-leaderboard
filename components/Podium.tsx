@@ -45,8 +45,8 @@ const Podium: React.FC<PodiumProps> = ({ topThree }) => {
             </div>
             <span className={`font-bold text-lg truncate w-full text-center ${rankColor}`}>{player.name}</span>
             <div className="flex items-center gap-1 text-slate-400 font-mono text-sm">
-                <Timer className="w-3 h-3" />
-                <span>{player.lapTime.toFixed(3)}s</span>
+                <Trophy className="w-3 h-3" />
+                <span>{player.score}</span>
             </div>
         </div>
         <div className={`w-full ${height} ${color} rounded-t-lg flex items-start justify-center pt-4 relative shadow-lg`}>

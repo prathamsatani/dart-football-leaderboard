@@ -6,20 +6,20 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generateLeaderboardCommentary = async (players: Player[]): Promise<string> => {
   try {
-    const topPlayers = players.slice(0, 5).map(p => ({ name: p.name, time: p.lapTime + 's', car: p.game }));
+    const topPlayers = players.slice(0, 5).map(p => ({ name: p.name, score: p.score, game: p.game }));
     
     if (topPlayers.length === 0) {
-      return "Track is empty! Get those RC cars on the starting line.";
+      return "Leaderboard is empty! Start playing to get on the board.";
     }
 
     const prompt = `
-      You are an adrenaline-fueled RC Car Racing commentator at a track side. 
-      Here is the current leaderboard for fastest lap times (Lower is better):
+      You are an energetic game commentator. 
+      Here is the current leaderboard for highest scores (Higher is better):
       ${JSON.stringify(topPlayers)}
       
       Write a short, high-energy commentary (max 3 sentences) summarizing the current standings. 
-      Highlight the driver with the fastest lap and how tight the gaps are between cars.
-      Use terms like "apex", "grip", "shaving off milliseconds", and "top speed".
+      Highlight the player with the highest score and how close the competition is.
+      Use exciting gaming terminology.
     `;
 
     const response = await ai.models.generateContent({
@@ -30,7 +30,7 @@ export const generateLeaderboardCommentary = async (players: Player[]): Promise<
     return response.text || "Commentary unavailable at this moment.";
   } catch (error) {
     console.error("Error generating commentary:", error);
-    return "The commentator is currently changing batteries. (Error connecting to Gemini)";
+    return "The commentator is currently taking a break. (Error connecting to Gemini)";
   }
 };
 
@@ -38,14 +38,14 @@ export const analyzePlayerPerformance = async (player: Player, allPlayers: Playe
     try {
         const rank = allPlayers.findIndex(p => p.id === player.id) + 1;
         const total = allPlayers.length;
-        const bestTime = allPlayers[0].lapTime;
-        const diff = (player.lapTime - bestTime).toFixed(3);
+        const topScore = allPlayers[0].score;
+        const diff = topScore - player.score;
         
         const prompt = `
-            Analyze the performance of RC driver "${player.name}" who clocked a lap time of ${player.lapTime}s in "${player.game}".
-            They are currently ranked ${rank} out of ${total} drivers.
-            The best lap time is ${bestTime}s (they are +${diff}s behind).
-            Give them specific racing advice on how to improve their line or setup.
+            Analyze the performance of player "${player.name}" who scored ${player.score} in "${player.game}".
+            They are currently ranked ${rank} out of ${total} players.
+            The top score is ${topScore} (they are ${diff} points behind).
+            Give them specific gameplay advice on how to improve their score.
             Keep it under 30 words.
         `;
 
